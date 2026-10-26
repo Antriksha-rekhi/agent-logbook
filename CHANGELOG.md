@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.0
+
+- Chat report: a chat's stats open as a report that starts with where the money went, by model and by kind of token, then shows how full the context got, what breaks cost once the cache went cold, the chat's pace, how Claude worked, the tools it ran, the agents it started and the files it edited.
+- The dashboard is grouped into Spend, Chats, Projects & files, Tokens & models, When you work and Plan limits.
+- The agent tools have plainer names: recent_chats, search_chats, read_chat, find_text, chat_edits and file_history. A connected Claude Code picks up the updated skill the next time the editor starts, with nothing to reconnect.
+- A Deleted chip lists chats you deleted and restores any of them to its original folder.
+- Message search can show more than the first 60 chats.
+- An open chat keeps updating when the file watcher goes quiet, and Refresh redraws it too.
+- Clearer wording in Settings, on the share card and in the Agents page examples.
+
 ## 1.5.0
 
 - Chat history for your agents: one click in Settings connects Claude Code and Codex to a local, read-only server over your chats. They can list and search past chats, pull a chat's context to continue its work, find exact strings in tool output, see what a chat changed (summary or diff) and which chats changed a file. Optionally limited to the current project. A skill lets you just ask in plain words.
