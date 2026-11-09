@@ -1,0 +1,365 @@
+{
+  "name": "agent-logbook",
+  "displayName": "Agent Logbook",
+  "description": "Browse, search, resume and measure your Claude Code and Codex sessions - with sub-agents, cost, and a usage dashboard. Everything stays on your machine.",
+  "version": "1.7.0",
+  "publisher": "ragulsundaram",
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "categories": [
+    "AI",
+    "Visualization",
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "claudeHistory",
+          "title": "Agent Logbook",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "claudeHistory": [
+        {
+          "id": "claudeHistory.view",
+          "name": "Agent Logbook",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "claudeHistory.focus",
+        "title": "Agent Logbook: Open"
+      },
+      {
+        "command": "claudeHistory.refresh",
+        "title": "Agent Logbook: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "claudeHistory.openInEditor",
+        "title": "Agent Logbook: Open in Editor Tab",
+        "icon": "$(link-external)"
+      },
+      {
+        "command": "claudeHistory.openBeside",
+        "title": "Agent Logbook: Open in Editor Tab to the Side",
+        "icon": "$(split-horizontal)"
+      },
+      {
+        "command": "claudeHistory.dashboard",
+        "title": "Agent Logbook: Open Dashboard",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "claudeHistory.board",
+        "title": "Agent Logbook: Open Live Chats",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "claudeHistory.testUsageAlerts",
+        "title": "Agent Logbook: Show Usage Alerts Again"
+      },
+      {
+        "command": "claudeHistory.arrange",
+        "title": "Agent Logbook: Arrange Chats…",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "claudeHistory.moveChat",
+        "title": "Agent Logbook: Move Chat To…",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "claudeHistory.moveChat.right-half",
+        "title": "Agent Logbook: Move Chat to Right Half"
+      },
+      {
+        "command": "claudeHistory.moveChat.right-third",
+        "title": "Agent Logbook: Move Chat to Right Third"
+      },
+      {
+        "command": "claudeHistory.moveChat.right-two-thirds",
+        "title": "Agent Logbook: Move Chat to Right Two Thirds"
+      },
+      {
+        "command": "claudeHistory.moveChat.left-half",
+        "title": "Agent Logbook: Move Chat to Left Half"
+      },
+      {
+        "command": "claudeHistory.moveChat.left-third",
+        "title": "Agent Logbook: Move Chat to Left Third"
+      },
+      {
+        "command": "claudeHistory.moveChat.left-two-thirds",
+        "title": "Agent Logbook: Move Chat to Left Two Thirds"
+      },
+      {
+        "command": "claudeHistory.moveChat.bottom-half",
+        "title": "Agent Logbook: Move Chat to Bottom Half"
+      },
+      {
+        "command": "claudeHistory.moveChat.bottom-third",
+        "title": "Agent Logbook: Move Chat to Bottom Third"
+      },
+      {
+        "command": "claudeHistory.moveChat.top-half",
+        "title": "Agent Logbook: Move Chat to Top Half"
+      },
+      {
+        "command": "claudeHistory.moveChat.full",
+        "title": "Agent Logbook: Move Chat to Full Editor"
+      },
+      {
+        "command": "claudeHistory.moveChat.panel",
+        "title": "Agent Logbook: Move Chat to the Panel at the Bottom"
+      },
+      {
+        "command": "claudeHistory.moveChat.panel-right",
+        "title": "Agent Logbook: Move Chat to the Panel on the Right"
+      },
+      {
+        "command": "claudeHistory.moveChat.beside",
+        "title": "Agent Logbook: Move Chat Beside Another in the Panel"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "claudeHistory.refresh",
+          "when": "view == claudeHistory.view",
+          "group": "navigation@0"
+        },
+        {
+          "command": "claudeHistory.openBeside",
+          "when": "view == claudeHistory.view",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Agent Logbook",
+      "properties": {
+        "claudeHistory.resumeTarget": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "terminal",
+            "claude",
+            "desktop"
+          ],
+          "enumDescriptions": [
+            "Wherever the chat was first opened: a terminal for CLI chats, the extension for extension chats",
+            "Always a terminal inside the editor",
+            "Always the Claude Code extension",
+            "Always the Claude Desktop app"
+          ],
+          "description": "Where Resume opens a chat."
+        },
+        "claudeHistory.skipPermissions": {
+          "scope": "application",
+          "type": "boolean",
+          "default": false,
+          "description": "Resume and fork chats with --dangerously-skip-permissions, so Claude runs every tool without asking first. Leave it off unless that is safe where you work."
+        },
+        "claudeHistory.pageSize": {
+          "type": "number",
+          "default": 8,
+          "minimum": 3,
+          "maximum": 200,
+          "description": "How many chats each folder shows before \"Show more\"."
+        },
+        "claudeHistory.sort": {
+          "type": "string",
+          "default": "recent",
+          "enum": [
+            "recent",
+            "cost",
+            "messages",
+            "title"
+          ],
+          "enumDescriptions": [
+            "Most recent first",
+            "Most expensive first",
+            "Longest first",
+            "By title, A to Z"
+          ],
+          "description": "How chats are ordered inside a folder."
+        },
+        "claudeHistory.exportDirectory": {
+          "scope": "application",
+          "type": "string",
+          "default": "",
+          "description": "Where exported chats are written. Empty opens them as an unsaved editor instead."
+        },
+        "claudeHistory.exportSourceCopy": {
+          "type": "boolean",
+          "scope": "application",
+          "default": false,
+          "description": "Write the raw .source.jsonl next to an exported chat. It holds every tool result in full, so anything a tool printed or read - keys in a .env, say - is in it."
+        },
+        "claudeHistory.dateFormat": {
+          "type": "string",
+          "default": "locale",
+          "enum": [
+            "locale",
+            "iso"
+          ],
+          "enumDescriptions": [
+            "Your computer's date style",
+            "Year first: 2026-09-15 14:30"
+          ],
+          "description": "How timestamps are shown."
+        },
+        "claudeHistory.openOnStartup": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show Agent Logbook in the sidebar when the editor opens or reloads, instead of the Explorer."
+        },
+        "claudeHistory.showLiveFirst": {
+          "type": "boolean",
+          "default": true,
+          "description": "Float chats that are running right now to the top of the list."
+        },
+        "claudeHistory.topBars": {
+          "scope": "application",
+          "type": "array",
+          "default": [
+            {
+              "key": "session",
+              "color": "#7fb069"
+            },
+            {
+              "key": "weekly_all",
+              "color": "#e0a33e"
+            },
+            {
+              "key": "weekly_scoped",
+              "color": "#d97757"
+            }
+          ],
+          "markdownDescription": "Which usage windows appear as bars across the top of the panel, in order - up to three. Easier to set from the Settings tab in the panel.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "enum": [
+                  "session",
+                  "weekly_all",
+                  "weekly_scoped",
+                  "codex_session",
+                  "codex_weekly"
+                ]
+              },
+              "color": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "claudeHistory.chatLayout": {
+          "type": "string",
+          "default": "panel",
+          "enum": [
+            "panel",
+            "panel-side",
+            "panel-right",
+            "right-half",
+            "right-third",
+            "right-two-thirds",
+            "bottom-half",
+            "bottom-third",
+            "right-stack",
+            "grid"
+          ],
+          "enumDescriptions": [
+            "Chats stack in the terminal panel, as before",
+            "Chats split side by side in the bottom panel; Cmd+J hides them all",
+            "The panel sits right of your code with chats stacked in it; Cmd+J hides them all",
+            "Code on the left, chat on the right, half and half",
+            "Code takes two thirds, chat the right third",
+            "Chat takes two thirds, code the left third",
+            "Code on top, chat underneath, half and half",
+            "Code on top, chat in the bottom third",
+            "Code on the left, two chats stacked on the right",
+            "Code top left, up to three chats in the other quarters"
+          ],
+          "description": "Where a resumed or new chat opens. Anything but the bottom panel opens it as a tab in a fixed spot in the editor area."
+        },
+        "claudeHistory.limitAlerts": {
+          "type": "boolean",
+          "default": false,
+          "description": "Also pop up a notification, once per window, when a quota bar you chose is flagged. The flag always shows in the panel and the status bar."
+        },
+        "claudeHistory.resetSoonWeeklyHours": {
+          "type": "number",
+          "default": 12,
+          "minimum": 1,
+          "maximum": 72,
+          "description": "How close a weekly reset counts as soon, in hours."
+        },
+        "claudeHistory.resetSoonSessionMinutes": {
+          "type": "number",
+          "default": 30,
+          "minimum": 5,
+          "maximum": 180,
+          "description": "How close a 5-hour reset counts as soon, in minutes."
+        },
+        "claudeHistory.unusedPercent": {
+          "type": "number",
+          "default": 30,
+          "minimum": 5,
+          "maximum": 95,
+          "description": "How much has to be left unused, in percent, for a reset coming soon to be flagged."
+        },
+        "claudeHistory.boardAllWindows": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show running chats from every editor window on the Live chats board, not only the chats in this window's folders."
+        },
+        "claudeHistory.finishAlerts": {
+          "type": "boolean",
+          "default": false,
+          "description": "Pop up a notification when a running chat finishes and is waiting for you. A count always shows in the status bar."
+        }
+      }
+    }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ragulsundaram/agent-logbook.git"
+  },
+  "keywords": [
+    "claude code",
+    "claude",
+    "codex",
+    "agent",
+    "chat history",
+    "session",
+    "transcripts",
+    "usage",
+    "cost",
+    "ai"
+  ],
+  "icon": "media/icon.png",
+  "homepage": "https://ragulsundaram.github.io/agent-logbook-site/",
+  "bugs": {
+    "url": "https://github.com/Ragulsundaram/agent-logbook/issues"
+  },
+  "galleryBanner": {
+    "color": "#1b1714",
+    "theme": "dark"
+  }
+}

@@ -1,0 +1,122 @@
+<div id="limits"></div>
+<div id="lnudges"></div>
+<nav id="tabs">
+  <button class="tab on" data-tab="chats" title="Chats"></button>
+  <button class="tab" data-tab="usage" title="Shareable card"></button>
+  <button class="tab" data-tab="digest" title="Digest"></button>
+  <button class="tab" data-tab="memory" title="Memory"></button>
+  <button class="tab" data-tab="agents" title="Your chat history as tools for Claude and Codex, and what they looked at"></button>
+  <button class="tab" data-tab="settings" title="Settings"></button>
+  <span class="tabgap"></span>
+  <span class="tools">
+    <button id="rescan" class="iconbtn" title="Refresh"></button>
+    <button id="boardbtn" class="iconbtn" title="Live chats: every running chat on one page"></button>
+    <button id="dash" class="iconbtn" title="Open the dashboard"></button>
+    <button id="newchat" class="iconbtn" title="Start a new Claude session in a terminal"></button>
+  </span>
+</nav>
+
+<section id="view-chats" class="view on">
+  <div class="bar">
+    <p id="listmeta"></p>
+    <div id="chips" class="chips"></div>
+    <div class="findrow">
+      <div class="searchbox">
+        <svg class="sicon outline" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="6.4"></circle><path d="M15.8 15.8 20.5 20.5"></path>
+        </svg>
+        <input id="q" type="text" placeholder="Search chats, folders or messages…" autocomplete="off">
+        <button id="qclear" title="Clear search" hidden>✕</button>
+      </div>
+      <button id="source" class="srcbtn" hidden></button>
+    </div>
+  </div>
+  <div id="rows"></div>
+  <div id="detail" hidden></div>
+</section>
+
+<section id="view-board" class="view">
+  <div class="bhead">
+    <h1>Live chats</h1>
+    <div id="bmeta" class="bfilters"></div>
+  </div>
+  <div id="bnudges"></div>
+  <div class="bsec" id="sec-needs"><div class="bsechead" id="bneedsh"></div><div id="bgrid"></div></div>
+  <div class="bsec" id="sec-work"><div class="bsechead" id="bworkh"></div><div id="bwork"></div></div>
+  <div class="bsec" id="sec-old"><div id="bold"></div></div>
+</section>
+
+<section id="view-agents" class="view">
+  <div id="agentsbody"></div>
+</section>
+
+<section id="view-settings" class="view">
+  <div id="setbody"></div>
+</section>
+
+<section id="view-usage" class="view">
+  <div class="bar">
+    <div class="seg" id="ranges">
+      <button class="on" data-days="1">Today</button>
+      <button data-days="7">7d</button>
+      <button data-days="30">30d</button>
+      <button data-days="0">All</button>
+    </div>
+  </div>
+  <div id="usagebody">
+    <div id="preview"><img id="cardimg" alt="Your usage card"></div>
+    <p class="opth">On the card</p>
+    <div class="opts">
+      <label for="opt-cost">
+        <span class="oname">Cost at API prices</span><em id="sub-cost"></em>
+        <input type="checkbox" id="opt-cost" checked><i class="sw"></i>
+      </label>
+      <label for="opt-tiles">
+        <span class="oname">Sessions, messages, edits, time</span><em>The five small tiles</em>
+        <input type="checkbox" id="opt-tiles" checked><i class="sw"></i>
+      </label>
+      <label for="opt-models">
+        <span class="oname">Models used</span><em id="sub-models"></em>
+        <input type="checkbox" id="opt-models" checked><i class="sw"></i>
+      </label>
+      <label for="opt-chart">
+        <span class="oname">Tokens per day</span><em id="sub-chart"></em>
+        <input type="checkbox" id="opt-chart" checked><i class="sw"></i>
+      </label>
+      <label for="opt-names">
+        <span class="oname">Project name</span><em id="sub-names">Left off the card</em>
+        <input type="checkbox" id="opt-names"><i class="sw"></i>
+      </label>
+    </div>
+    <div class="cardbtns">
+      <button id="shotcopy"></button>
+      <button id="shot"></button>
+    </div>
+    <p class="cardnote">The image is 1200 by 675, the size X and Slack preview without cropping.</p>
+  </div>
+</section>
+
+<section id="view-digest" class="view">
+  <div class="bar">
+    <div class="seg" id="dranges">
+      <button data-days="1">Today</button>
+      <button class="on" data-days="7">7 days</button>
+      <button data-days="30">30 days</button>
+    </div>
+  </div>
+  <div id="digest"></div>
+</section>
+
+<section id="view-memory" class="view">
+  <div class="bar" id="membar">
+    <p id="memmeta"></p>
+    <div class="searchbox">
+      <svg class="sicon outline" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="6.4"></circle><path d="M15.8 15.8 20.5 20.5"></path>
+      </svg>
+      <input id="memq" type="text" placeholder="Search memories…" autocomplete="off">
+    </div>
+  </div>
+  <div id="memrows"></div>
+  <div id="memread" hidden></div>
+</section>

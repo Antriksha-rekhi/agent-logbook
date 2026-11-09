@@ -1,0 +1,58 @@
+<header id="top">
+  <div class="htitle">
+    <h1 id="title">Chat report</h1>
+    <p id="sub"></p>
+  </div>
+  <button id="open">Open the chat</button>
+</header>
+
+<section class="kpis" id="kpis"></section>
+
+<section class="panel">
+  <div class="phead"><h2>Where the money went</h2><span>at API prices</span></div>
+  <div class="two">
+    <div id="cost"></div>
+    <div id="tokens"></div>
+  </div>
+  <div class="table-wrap"><table id="models"></table></div>
+</section>
+
+<section class="panel">
+  <div class="phead"><h2>How full the context got</h2><span id="ctxmeta"></span></div>
+  <div id="ctx"></div>
+</section>
+
+<section class="panel" id="coldpanel" hidden>
+  <div class="phead"><h2>Paying again after breaks</h2><span>what the pauses cost</span></div>
+  <div class="kpis" id="coldkpis"></div>
+  <div class="table-wrap"><table id="cold"></table></div>
+  <p class="foot" id="coldnote"></p>
+</section>
+
+<div class="two">
+  <section class="panel">
+    <div class="phead"><h2>Pace</h2><span>time, turns and reply size</span></div>
+    <div id="pace"></div>
+  </section>
+  <section class="panel">
+    <div class="phead"><h2>How Claude worked</h2><span>why each reply ended</span></div>
+    <div id="shape"></div>
+  </section>
+</div>
+
+<section class="panel">
+  <div class="phead"><h2>Tools it ran</h2><span>the ten it called most</span></div>
+  <div id="tools"></div>
+</section>
+
+<section class="panel" id="agentspanel" hidden>
+  <div class="phead"><h2>Agents it started</h2><span>their work counts toward this chat</span></div>
+  <div class="table-wrap"><table id="agents"></table></div>
+</section>
+
+<section class="panel" id="filespanel" hidden>
+  <div class="phead"><h2>Files it edited</h2><span id="filesmeta"></span></div>
+  <div class="table-wrap"><table id="files"></table></div>
+</section>
+
+<div id="tip" hidden></div>

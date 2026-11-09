@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.7.0
+
+- Chats open faster. They load in the background, so a click never waits behind a long chat. Long chats show their latest messages first and the rest slots in underneath without redrawing, and a chat you already read only reads what was added since.
+- The chat header and each agent show the model. Running agents are timed up to now, and the header numbers stay live.
+- Plan limit countdowns tick on their own, and a limit that has reset drops its warning.
+- The header row fits narrow panels: the view name shortens, then hides, and the tools wrap together instead of being cut off.
+- The folders open in this window start expanded and other folders start collapsed, so the list shows this project's chats first. A search still opens every folder.
+- Numbered lists keep counting across blank lines, so copies paste into Slack as 1, 2, 3. Lines starting with • show as a bulleted list.
+- Fix: a chat whose first quick read began at a screenshot now opens, and clicking it again while it loads no longer starts a second read.
+
 ## 1.6.0
 
 - Chat report: a chat's stats open as a report that starts with where the money went, by model and by kind of token, then shows how full the context got, what breaks cost once the cache went cold, the chat's pace, how Claude worked, the tools it ran, the agents it started and the files it edited.

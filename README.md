@@ -66,6 +66,13 @@ windows they show, in what order, in what colour - along with list ordering,
 where Resume opens, and what an export contains. Every control writes the same
 setting the editor's own settings page does.
 
+## Contributing
+
+The source is on [GitHub](https://github.com/Ragulsundaram/agent-logbook).
+Issues and pull requests are welcome. See
+[CONTRIBUTING.md](https://github.com/Ragulsundaram/agent-logbook/blob/main/CONTRIBUTING.md)
+to run it from source.
+
 ## Licence
 
 MIT.
