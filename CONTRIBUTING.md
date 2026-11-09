@@ -31,6 +31,8 @@ You need real Claude Code or Codex chats in `~/.claude/projects` or
 
 ## Pull requests
 
+- Using an AI coding agent? Point it at [AGENTS.md](AGENTS.md) first (Claude Code reads it through `CLAUDE.md` automatically). The same rules apply to people.
+
 - Keep each one to a single change, and say in the description what you did and how you tested it.
 - Issues labelled `good first issue` are a good place to start.
 - Agent Logbook reads private transcripts. Never add code that sends their

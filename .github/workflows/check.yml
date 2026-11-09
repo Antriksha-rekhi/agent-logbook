@@ -1,0 +1,46 @@
+name: Check
+
+# pull_request (not pull_request_target): forks run with a read-only token and no secrets.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Syntax
+        run: for f in *.js media/*.js; do node --check "$f" || exit 1; done
+
+      - name: No dependencies or install scripts
+        run: |
+          node -e '
+            const p = require("./package.json")
+            const bad = ["dependencies", "devDependencies", "optionalDependencies", "bundleDependencies"].filter(k => p[k] && Object.keys(p[k]).length)
+            const hooks = Object.keys(p.scripts || {}).filter(k => /install|prepare|prepack|postpack/.test(k))
+            if (bad.length || hooks.length) { console.error("Not allowed in package.json:", [...bad, ...hooks].join(", ")); process.exit(1) }
+          '
+
+      - name: No new network calls
+        # The plan-usage request in scan.js is the only one allowed.
+        run: |
+          hits=$(grep -nE "node:https?['\"]|require\(['\"]https?['\"]\)|\bfetch\(|XMLHttpRequest|new WebSocket|sendBeacon" *.js media/*.js media/*.html | grep -v '^scan\.js:' || true)
+          if [ -n "$hits" ]; then echo "$hits"; echo "Network access outside scan.js. See AGENTS.md rule 2."; exit 1; fi
+
+      - name: No transcripts committed
+        run: |
+          found=$(git ls-files '*.jsonl')
+          if [ -n "$found" ]; then echo "$found"; echo "Do not commit transcripts. See AGENTS.md rule 3."; exit 1; fi
+
+      - name: Packages
+        run: npx --yes @vscode/vsce@3 package --out /tmp/agent-logbook.vsix
