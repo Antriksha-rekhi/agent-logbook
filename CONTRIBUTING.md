@@ -11,6 +11,7 @@ git clone https://github.com/Ragulsundaram/agent-logbook.git
 cd agent-logbook
 code --extensionDevelopmentPath="$PWD"
 ```
+Or open the folder in VS Code and press F5 (Run Extension).
 
 That opens a new editor window with your copy of the extension loaded. After a
 change, run **Developer: Reload Window** in that window to pick it up. Cursor and
