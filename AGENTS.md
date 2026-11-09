@@ -58,6 +58,7 @@ Match the file you are in:
 
 ```sh
 for f in *.js media/*.js; do node --check "$f" || exit 1; done
+node .github/check.js origin/main   # the same source rules CI runs
 code --extensionDevelopmentPath="$PWD"   # then try the change by hand
 ```
 

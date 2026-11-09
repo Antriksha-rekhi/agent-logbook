@@ -48,5 +48,7 @@ Releases to the VS Code Marketplace and Open VSX are done by the maintainer.
 
 ## Security
 
+What the extension can access, and how changes are controlled: [SECURITY.md](SECURITY.md).
+
 If you find a security problem, please don't open a public issue. Report it
 privately through GitHub's **Report a vulnerability** button on the Security tab.
