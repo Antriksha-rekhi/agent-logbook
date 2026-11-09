@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.0
+
+- The live board is redesigned into Needs you, Working and Earlier sections, with counts on the filters and shorter, calmer cards. Codex chats show there too.
+- Reply to a chat from its card. When Claude asks a question, it moves to the top of the card with the whole paragraph it ends, and one-tap replies appear when the chat's last reply makes the options clear.
+- Working cards say what they are doing, approvals and questions stand out, new replies are marked and read ones dim. The status bar counts chats that finish.
+- The board holds still while you scroll or type, then re-sorts as soon as you stop, so a chat Claude just answered moves up. Chats waiting more than a day fold into one line.
+- Search never hangs: a stuck search ends with what it found and a note to retry.
+- Fix: message search with capital letters in the query no longer drops answers.
+- The source is now on GitHub, and contributions are welcome.
+
 ## 1.7.0
 
 - Chats open faster. They load in the background, so a click never waits behind a long chat. Long chats show their latest messages first and the rest slots in underneath without redrawing, and a chat you already read only reads what was added since.
