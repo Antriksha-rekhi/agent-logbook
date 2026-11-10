@@ -375,7 +375,7 @@ function drawLimits (l) {
         </div>`).join('')}
       ${advice.map(a => `<div class="ladvice">${a}</div>`).join('')}
       <div class="lfoot">${items.map(x => `${esc(x.label)} ${x.percent}% used`).join(' · ')}
-        <span>read ${age} <button id="lrefresh" title="Fetch usage again">↻</button></span></div>
+        <span>read ${age} <button id="lrefresh" title="Fetch usage again" aria-label="Fetch usage again">↻</button></span></div>
       ${note ? `<div class="lwarn">${note}</div>` : ''}
     </div>`
   $('#lrefresh').onclick = ev => { ev.stopPropagation(); send({ type: 'refreshLimits' }) }
@@ -1352,11 +1352,13 @@ function agentActs (t) {
   if (all.length > 1 && at >= 0) {
     const prev = el('button', 'btn ico'); prev.textContent = '‹'
     prev.title = 'Previous agent'
+    prev.setAttribute('aria-label', prev.title)
     if (at === 0) prev.disabled = true
     else prev.onclick = () => openAgent(t.sessionId, all[at - 1].id)
     const pos = el('span', 'apos', `${at + 1} of ${all.length}`)
     const next = el('button', 'btn ico'); next.textContent = '›'
     next.title = 'Next agent'
+    next.setAttribute('aria-label', next.title)
     if (at === all.length - 1) next.disabled = true
     else next.onclick = () => openAgent(t.sessionId, all[at + 1].id)
     acts.append(prev, pos, next)
