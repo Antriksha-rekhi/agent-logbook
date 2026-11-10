@@ -3369,7 +3369,17 @@ document.addEventListener('copy', e => {
   if (!inMsg(range.commonAncestorContainer)) return
   // Even part of one line comes through here: left to the browser, a phrase
   // picked out of a list item kept its bold in a form Slack ignores.
+  // A copy of part of a numbered list loses the items before it, so each item's
+  // real number is read from the page first and travels with the copy.
+  const ancEl = n => (n.nodeType === 3 ? n.parentElement : n)
+  const scope = ancEl(range.commonAncestorContainer).closest('ol') || ancEl(range.commonAncestorContainer)
+  const numbered = [...scope.querySelectorAll('ol > li')]
+  for (const li of numbered) {
+    const ol = li.parentElement
+    li.dataset.copyN = String((Number(ol.getAttribute('start')) || 1) + [...ol.children].indexOf(li))
+  }
   const frag = range.cloneContents()
+  for (const li of numbered) delete li.dataset.copyN
   const host = document.createElement('div')
   host.appendChild(frag)
   // items picked from inside one list come without their list: put it back,
@@ -3382,12 +3392,46 @@ document.addEventListener('copy', e => {
     host.appendChild(list)
   }
 
-  const walk = node => {
-    if (node.nodeType === 3) return node.nodeValue
+  // The plain text is written as Markdown, the same as the copy button's. Slack
+  // builds a paste from the plain text and turns its Markdown into formatting,
+  // so a selection copied as bare words lost every link and bold on the way.
+  // `label` is set inside a link's text: plain text there has its brackets and
+  // backslashes escaped so "a]b" cannot close the label early, while code
+  // inside the link is left as it is - Markdown reads a code span literally.
+  const walk = (node, label = false) => {
+    if (node.nodeType === 3) return label ? node.nodeValue.replace(/[\\[\]]/g, '\\$&') : node.nodeValue
     const tag = node.nodeName.toLowerCase()
     if (tag === 'button' || node.classList?.contains('msgcopy')) return ''
-    const inner = [...node.childNodes].map(walk).join('')
-    if (tag === 'li') return '- ' + inner.trim() + '\n'
+    const inside = tag === 'a' ? true : tag === 'code' ? false : label
+    const inner = [...node.childNodes].map(n => walk(n, inside)).join('')
+    if (tag === 'a') {
+      const href = node.getAttribute('href') || ''
+      const plain = node.textContent.trim()
+      if (!/^https?:\/\//i.test(href)) return [...node.childNodes].map(n => walk(n, label)).join('')
+      if (plain === href) return href
+      // brackets and spaces in the address are encoded, so a ")" inside it
+      // cannot end the link early; the address still opens the same page
+      const dest = href.replace(/[()<>\s]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'))
+      return `[${inner}](${dest})`
+    }
+    if ((tag === 'strong' || tag === 'b') && inner.trim()) return `**${inner}**`
+    if ((tag === 'em' || tag === 'i') && inner.trim()) return `_${inner}_`
+    if (tag === 'code' && node.parentElement?.nodeName !== 'PRE') {
+      // a fence longer than any run of backticks inside, padded where the code
+      // starts or ends with one, so it stays a single code span
+      const longest = Math.max(0, ...(inner.match(/`+/g) || []).map(r => r.length))
+      const fence = '`'.repeat(longest + 1)
+      const pad = /^`|`$/.test(inner) ? ' ' : ''
+      return fence + pad + inner + pad + fence
+    }
+    if (tag === 'li') {
+      // numbered items keep the number they had on the page
+      const list = node.parentElement
+      const n = list?.nodeName === 'OL' || node.dataset.copyN
+        ? (node.dataset.copyN || (Number(list?.getAttribute('start')) || 1) + [...(list?.children || [])].indexOf(node)) + '. '
+        : '- '
+      return n + inner.trim() + '\n'
+    }
     if (tag === 'br') return '\n'
     if (['p', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'ul', 'ol', 'table'].includes(tag)) {
       return inner.trim() + '\n\n'
