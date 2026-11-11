@@ -3411,11 +3411,10 @@ document.addEventListener('copy', e => {
       const plain = node.textContent.trim()
       if (!/^https?:\/\//i.test(href)) return [...node.childNodes].map(n => walk(n, label)).join('')
       if (plain === href) return href
-      // brackets and spaces in the address are encoded, so a ")" inside it
-      // cannot end the link early; the address still opens the same page
-      const dest = href.replace(/[()<>\s]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'))
-      return `[${inner}](${dest})`
-    }
+
+      const dest = href.replace(/[<>\s]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'))
+      return `[${inner}](<${dest}>)`
+}
     if ((tag === 'strong' || tag === 'b') && inner.trim()) return `**${inner}**`
     if ((tag === 'em' || tag === 'i') && inner.trim()) return `_${inner}_`
     if (tag === 'code' && node.parentElement?.nodeName !== 'PRE') {
