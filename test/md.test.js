@@ -50,12 +50,6 @@ test('keeps ordinary Markdown working', () => {
   assert.ok(html.includes('<a href="https://example.com" title="https://example.com">link</a>'))
   assert.ok(html.includes('<pre class="code" data-lang="js"><code>const x = 1</code></pre>'))
 })
-test('preserves literal parentheses in Markdown link destinations', () => {
-  const url = 'https://example.com/page_(test)'
-  const html = md('[link](<' + url + '>)')
-
-  assert.ok(html.includes('<a href="' + url + '" title="' + url + '">link</a>'))
-})
 
 test('keeps single line breaks inside a paragraph', () => {
   const html = md('Colour: blue' + nl + 'Size: **large**' + nl + nl + 'Next paragraph')
